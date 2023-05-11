@@ -30,7 +30,7 @@ public class DataAccess
     {
         using (SmsCodeSenderContext db = new SmsCodeSenderContext(_config))
         {
-            return db.SmsMessages.OrderBy(s => s.SmsMessageId).Take(50).ToList();
+            return db.SmsMessages.OrderByDescending(s => s.SmsMessageId).Take(50).ToList();
         }
     }
 

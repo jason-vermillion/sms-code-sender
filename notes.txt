@@ -38,6 +38,7 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 // scaffold db files from existing database
 dotnet ef dbcontext scaffold "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+dotnet ef dbcontext scaffold "name=DefaultConnection" Microsoft.EntityFrameworkCore.SqlServer -o Models
 
 
 // ngrok with ssl on localhost
@@ -49,7 +50,9 @@ az webapp up --sku F1 --name sms-code-sender --os-type windows --location centra
 az webapp up --sku F1 --name sms-code-sender --os-type windows
 az webapp up --os-type windows
 
-
+find and kill dev web server holding port
+lsof -i:7041
+kill -9 <process_id>
 
 
 

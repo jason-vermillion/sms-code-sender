@@ -1,7 +1,10 @@
-﻿namespace WebAPI;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAPI;
 
 public partial class SmsMessage
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int SmsMessageId { get; set; }
 
     public string? ToPhone { get; set; }
