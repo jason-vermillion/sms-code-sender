@@ -1,0 +1,63 @@
+https://localhost:7041/api/sms/receive
+https://localhost:7041/api/smscoderequests
+
+https://sms-code-sender.azurewebsites.net/sms/receive
+https://sms-code-sender.azurewebsites.net/api/smscoderequests
+
+
+Install swagger
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio-code
+dotnet add sms-code-sender.csproj package Swashbuckle.AspNetCore -v 6.2.3
+
+https://www.twilio.com/docs/sms/quickstart/csharp-dotnet-core#create-a-new-aspnet-core-project
+Twilio project setup
+mkdir TwilioReceive
+cd TwilioReceive
+dotnet new mvc
+dotnet add package Twilio
+dotnet add package Twilio.AspNet.Core
+
+dotnet remove package Twilio
+dotnet remove package Twilio.AspNet.Core
+dotnet remove package Twilio.AspNet.Mvc
+
+user secrets for localhost environment variables
+dotnet user-secrets init
+
+release build
+dotnet publish -c Release -o ./bin/Publish
+dotnet publish -c Release -o ./bin/Release
+
+// Entity framework installation
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet tool install --global dotnet-ef
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+// scaffold db files from existing database
+dotnet ef dbcontext scaffold "Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+
+// ngrok with ssl on localhost
+ngrok http https://localhost:7041
+
+azure cli
+az account list-locations
+az webapp up --sku F1 --name sms-code-sender --os-type windows --location centralus
+az webapp up --sku F1 --name sms-code-sender --os-type windows
+az webapp up --os-type windows
+
+
+
+
+
+
+
+/*
+string[] fromMobiles = { "+15017122661", "+15017125555", "+15017123333" };
+string connStr = _config.GetSection("ConnectionStrings").GetSection("DefaultConnectionString").Value;
+string value1 = _config.GetSection("Keys").GetSection("twilio_setting_1").Value;
+string value2 = _config.GetSection("Keys").GetSection("twilio_setting_2").Value;
+*/
