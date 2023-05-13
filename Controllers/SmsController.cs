@@ -10,12 +10,12 @@ namespace TwilioReceive.Controllers
     public class SmsController : TwilioController
     {
         private readonly ILogger<SmsController> _logger;
-        private readonly IConfiguration _config;
+        private readonly SmsCodeSenderContext _dbContext;
 
-        public SmsController(ILogger<SmsController> logger, IConfiguration configuration)
+        public SmsController(ILogger<SmsController> logger, SmsCodeSenderContext dbContext)
         {
             _logger = logger;
-            _config = configuration;
+            _dbContext = dbContext;
         }
 
         // Receive and respond to incoming sms from twilio
@@ -25,7 +25,7 @@ namespace TwilioReceive.Controllers
             var messagingResponse = new MessagingResponse();
             string input = incomingMessage.Body;
             SmsHelper sms = new SmsHelper();
-            DataAccess da = new DataAccess(_config);
+            DataAccess da = new DataAccess(_dbContext);
             string responseMsg = "Invalid message, expected a number";
 
             // validate
@@ -39,9 +39,28 @@ namespace TwilioReceive.Controllers
 
             try
             {
-                //da.insertMessage("From#", "To#", "MsgBody", "SmsSid");
-                da.insertMessage(incomingMessage.From, incomingMessage.To, incomingMessage.Body, incomingMessage.SmsSid);
-                da.insertMessage(incomingMessage.To, incomingMessage.From, responseMsg, string.Empty);
+                List<SmsMessage> messages = new List<SmsMessage>();
+                messages.Add(
+                    new SmsMessage
+                    {
+                        FromPhone = incomingMessage.From,
+                        ToPhone = incomingMessage.To,
+                        MessageBody = incomingMessage.Body,
+                        MessageSid = incomingMessage.MessageSid
+                    }
+                );
+
+                messages.Add(
+                    new SmsMessage
+                    {
+                        FromPhone = incomingMessage.To,
+                        ToPhone = incomingMessage.From,
+                        MessageBody = incomingMessage.Body,
+                        MessageSid = String.Empty
+                    }
+                );
+
+                da.insertMessages(messages);
             }
             catch (Exception e)
             {

@@ -5,25 +5,15 @@ namespace WebAPI;
 public partial class SmsCodeSenderContext : DbContext
 {
 
-    private readonly IConfiguration _config;
-
-    public SmsCodeSenderContext(IConfiguration configuration)
-    {
-        _config = configuration;
-    }
-
-    public SmsCodeSenderContext(DbContextOptions<SmsCodeSenderContext> options, IConfiguration configuration)
+    public SmsCodeSenderContext(DbContextOptions<SmsCodeSenderContext> options)
         : base(options)
     {
-        _config = configuration;
     }
 
     public virtual DbSet<SmsMessage> SmsMessages { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string? conStr = _config.GetConnectionString("DefaultConnection");
-        optionsBuilder.UseSqlServer(conStr);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

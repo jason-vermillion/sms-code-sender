@@ -3,42 +3,41 @@ namespace WebAPI;
 
 public class DataAccess
 {
-    private readonly IConfiguration _config;
+    private readonly SmsCodeSenderContext _dbContext;
 
-    public DataAccess(IConfiguration configuration)
+    public DataAccess(SmsCodeSenderContext dbContext)
     {
-        _config = configuration;
+        _dbContext = dbContext;
+
     }
 
     public void insertMessage(string fromPhone, string toPhone, string messageBody, string messageSid)
     {
-        using (SmsCodeSenderContext db = new SmsCodeSenderContext(_config))
+        SmsMessage msg = new SmsMessage
         {
-            SmsMessage msg = new SmsMessage();
+            FromPhone = fromPhone,
+            ToPhone = toPhone,
+            MessageBody = messageBody,
+            MessageSid = messageSid
+        };
 
-            msg.FromPhone = fromPhone;
-            msg.ToPhone = toPhone;
-            msg.MessageBody = messageBody;
-            msg.MessageSid = messageSid;
+        _dbContext.SmsMessages.Add(msg);
+        _dbContext.SaveChanges();
+    }
 
-            db.SmsMessages.Add(msg);
-            db.SaveChanges();
-        }
+    public void insertMessages(List<SmsMessage> items)
+    {
+        _dbContext.AddRange(items);
+        _dbContext.SaveChanges();
     }
 
     public IEnumerable<SmsMessage> GetLast50SmsMessages()
     {
-        using (SmsCodeSenderContext db = new SmsCodeSenderContext(_config))
-        {
-            return db.SmsMessages.OrderByDescending(s => s.SmsMessageId).Take(50).ToList();
-        }
+        return _dbContext.SmsMessages.OrderByDescending(s => s.SmsMessageId).Take(50).ToList();
     }
 
     public int GetTotalSmsMessageCount()
     {
-        using (SmsCodeSenderContext db = new SmsCodeSenderContext(_config))
-        {
-            return db.SmsMessages.Count();
-        }
+        return _dbContext.SmsMessages.Count();
     }
 }

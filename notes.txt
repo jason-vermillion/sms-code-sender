@@ -1,8 +1,8 @@
 https://localhost:7041/api/sms/receive
 https://localhost:7041/api/smscoderequests
 
-https://sms-code-sender.azurewebsites.net/sms/receive
 https://sms-code-sender.azurewebsites.net/api/smscoderequests
+https://sms-code-sender.azurewebsites.net/sms/receive
 
 
 Install swagger

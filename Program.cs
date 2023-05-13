@@ -1,13 +1,12 @@
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
 builder.Services.AddDbContext<WebAPI.SmsCodeSenderContext>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-*/
-
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

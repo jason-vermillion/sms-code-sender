@@ -1,4 +1,4 @@
-namespace WebAPI;
+namespace WebAPI.Dto;
 
 // response body DTO format for the /api/
 public class SmsCodeListResponseDto

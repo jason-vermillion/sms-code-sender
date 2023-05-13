@@ -1,17 +1,19 @@
-namespace WebAPI;
+using WebAPI.Dto;
+
+namespace WebAPI.Models;
 
 public class SmsCodeRequestModel
 {
-    private readonly IConfiguration _config;
-    public SmsCodeRequestModel(IConfiguration configuration)
+    private readonly SmsCodeSenderContext _dbContext;
+    public SmsCodeRequestModel(SmsCodeSenderContext dbContext)
     {
-        _config = configuration;
+        _dbContext = dbContext;
     }
 
     public SmsCodeListResponseDto getCodeList(int offset, int limit)
     {
         SmsCodeListResponseDto result = new SmsCodeListResponseDto();
-        DataAccess da = new DataAccess(_config);
+        DataAccess da = new DataAccess(_dbContext);
 
         result.Limit = 50;
         result.Offset = 0;
@@ -25,7 +27,8 @@ public class SmsCodeRequestModel
             result.Items.Add(
                 new SmsCodeDto
                 {
-                    FromPhone = sms.FromPhone,
+                    SmsMessageId = sms.SmsMessageId,
+                    FromPhone = sms.ToPhone,
                     ToPhone = sms.ToPhone,
                     MessageBody = sms.MessageBody,
                     MessageSid = sms.MessageSid,
